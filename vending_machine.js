@@ -1,5 +1,6 @@
 // For reading the keyboard input
 const readline = require('readline-sync');
+const Big = require('big.js');
 
 //---------------------------------------------
 // A class representing a vending machine
@@ -44,8 +45,9 @@ function VendingMachine(items, prices)
 	// --------------------------------------
 	this.inputCoins = function(item, price, numItems)
 	{
+		price = new Big (price);
 		// The coin sum
-		var coinSum = 0.0;
+		var coinSum = new Big(0.0);
 			
 		do
 		{
@@ -67,7 +69,7 @@ function VendingMachine(items, prices)
 			else
 			{
 				// Get the floating point value
-				var floatCents = parseFloat(insertedCents);	
+				var floatCents = new Big(parseFloat(insertedCents));	
 			
 				// Add the coin sum
 				coinSum += floatCents;
