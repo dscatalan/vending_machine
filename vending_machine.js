@@ -101,9 +101,9 @@ function VendingMachine(items, prices)
 		this.showMenu();
 		
 		// The item number
-		var itemNum = readline.question("Please enter the item number: ");
+		var itemNum = readline.keyInSelect( this.items ,"Please enter the item number: ");
 				
-		console.log("You selected item: ", itemNum);
+		console.log("You selected item: ", itemNum + 1);
 		
 		// If this is a bulk purchase, then show the menu
 		var numItemsStr = readline.question("How many " + this.items[itemNum] + "(s) would you like to purchase? ");

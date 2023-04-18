@@ -10,7 +10,7 @@
 
 Security Concern: mathematical calculation errors
 
-Fix: Use big-js library (and/or convert decimals to integers prior to performing mathematical calculations)
+Fix: Use [big-js](http://mikemcl.github.io/big.js/) library (and/or convert decimals to integers prior to performing mathematical calculations)
 
 Open Terminal
 
@@ -23,6 +23,18 @@ Install big.js
 ```shell
 npm install big.js
 ```
+
+Use big-js on any floating point variables.
+
+
+
+### Issue 2: Passing Invalid arguments to parseInt or parseFloat
+
+Security Concern: Will lead to incorrect math calculations, allows program input to be exploited.
+
+Fix:  Validate User input
+
+Use [`readlineSync.questionFloat()`](https://github.com/anseki/readline-sync#questionfloat) for float inputs. Readline-sync has more available [utility methods](https://github.com/anseki/readline-sync#utility-methods).
 
 
 
