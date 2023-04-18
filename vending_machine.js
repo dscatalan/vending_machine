@@ -56,8 +56,12 @@ function VendingMachine(items, prices) {
         inputOptions,
         "Choose an input option: "
       );
+      if (inputChoice === -1) {
+        return;
+      }
       console.log(inputOptions[inputChoice] + " was chosen.");
-      console.log("inputChoice: ", inputChoice);
+      console.log("inputChoice: ", inputChoice + 1);
+
       if (inputChoice + 1 === 1) {
         console.log("Inserting money...");
         let badInput = true;
@@ -112,7 +116,7 @@ function VendingMachine(items, prices) {
           console.log("returning money ->", coinSum.toFixed(2));
         }
         exitFlag = true;
-      }
+      } 
     } while (exitFlag === false);
   };
 
@@ -169,7 +173,7 @@ function VendingMachine(items, prices) {
   };
 }
 
-const vm = new VendingMachine(
+let vm = new VendingMachine(
   ["Water", "Soda", "Pizza", "Taco", "Tesla"],
   [Big(0.5), Big(0.99), Big(1.99), Big(3.99), Big(850000.0)]
 );

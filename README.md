@@ -52,6 +52,12 @@ Security Concern: Returning incorrect boolean due to type conversion
 
 Fix: Generally you should always use `===` or `!==`
 
+
+
+### Issue 5: Not using prototype (or syntactic sugar provided by Classes) functions for vending machine object
+
+
+
 ## More Secure Coding
 
 ## XSS
