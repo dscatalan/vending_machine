@@ -7,185 +7,152 @@ const Big = require('big.js');
 // @param items - an array of items
 // @param prices - the price of each item
 //--------------------------------------------
-function VendingMachine(items, prices)
-{
+function VendingMachine(items, prices) {
 	// Save the items and prices
 	this.items = items;
-	this.prices = prices; 
+	this.prices = prices;
 
 	// How many coins the machine has accepted
-	this.sumOfCointsAccepted = 0	
-	
-	
+	this.sumOfCointsAccepted = 0
+
+
 	// Displays the menu
-	this.showMenu = function()
-	{
+	this.showMenu = function () {
 
 		console.log("Welcome to our flawless and secure vending experience!");
 
 		// Print Woot twice
-		for(var i = 0; i < 2; ++i)
-		{
+		for (var i = 0; i < 2; ++i) {
 			console.log("Woot!");
 		}
-		
+
 		// Prints all the items
-		for(var i; i < this.items.length; ++i)
-		{
-			console.log(i + ". " + this.items[i] +  " [$" + this.prices[i] + "]");
+		for (var i; i < this.items.length; ++i) {
+			console.log(i + ". " + this.items[i] + " [$" + this.prices[i] + "]");
 		}
 	}
-	
-	
-	
+
+
+
 	// ------------------------------------
 	// Accepts coins
 	// @param item - the requested item
 	// @param price - the price of the item
 	// --------------------------------------
-	this.inputCoins = function(item, price, numItems)
-	{
-		price = new Big (price);
+	this.inputCoins = function (item, price, numItems) {
+		price = new Big(price);
 		// The coin sum
 		var coinSum = new Big(0.0);
-			
-		do
-		{
-			// Get the money
-			var insertedCents = readline.question("\nPlease insert the bills (whole numbers) and/or cents (e.g., .25 to purchase your) to purchase your " +  item.toLowerCase()+  "(" +  coinSum + " inserted so far)\n Enter [r] to return your money. \n Enter [v] to start vending with the current amount. \n Please enter the amount:  ");
-			
-			// No return requested
-			if(insertedCents == "r")
-			{
-				this.returnMoney(coinSum);
-				break;
-			}
-			// Vend with the current funds!
-			if(insertedCents == "v")
-			{
-				break;
-			}
-			// Looks like money was deposited
-			else
-			{
+		var floatCents = new Big(0.0);
+
+		let inputOptions = ['Insert money', 'Return money', 'Start vending with current amount']
+		let insertedCents = new Big(0.0);
+
+		let exitFlag = false;
+
+		do {
+			// Get the Option
+			let inputChoice = readline.keyInSelect(inputOptions, "Choose an input option: ");
+			//inputChoice += 1;
+			console.log(inputOptions[inputChoice] + ' was chosen.');
+			console.log("inputChoice: ", inputChoice)
+			if (inputChoice + 1 === 1) {
+				console.log("Inserting money...");
+				let badInput = true
+				while (badInput) {
+					// Get the money
+					insertedCents = readline.questionFloat("\nPlease insert the bills (whole numbers) and/or cents (e.g., .25) to purchase your "
+						+ item.toLowerCase() + " (" + coinSum + " inserted so far) \nPlease enter the amount:  ");
+
+					if (insertedCents >= 0) {
+						console.log("You entered: ", insertedCents)
+						badInput = false;
+
+					} else {
+						console.log("Please enter a number greater than or equal to 0.")
+					}
+				}
 				// Get the floating point value
-				var floatCents = new Big(parseFloat(insertedCents));	
-			
+				floatCents = new Big(parseFloat(insertedCents));
+
 				// Add the coin sum
-				coinSum += floatCents;
+				coinSum = coinSum.plus(floatCents);
+
+				console.log("Just accepted ", floatCents, " worth of coins\n");
+
+
 			}
-			
-			console.log("Just accepted ", floatCents, " worth of coins\n");
-			
-		}while(coinSum != price * numItems);
-		
-		// Enough money! 
-		if(Math.floor(coinSum / price) >= numItems)
-		{
-			console.log("Please claim you ", numItems, " ", item , "(s).  Also, returning to you the sum of ", coinSum - ((numItems * numItems * price) / numItems)); 
-		}
-		// Not enough money
-		else
-		{
-			console.log("Sorry, insufficient funds!");
-			
-		}
-		
+			else if (inputChoice + 1 === 2) {
+				// Return Requested
+				console.log("returning money ->", coinSum.toFixed(2));
+				exitFlag = true;
+
+			}
+			else if (inputChoice + 1 === 3) {
+				console.log("start vending with current amount");
+				// Enough money! 
+				if (Math.floor(coinSum / price) >= numItems) {
+					let returnSum = new Big(coinSum - ((numItems * numItems * price) / numItems))
+					console.log("Please claim your ", numItems, " ", item, "(s).  Also, returning to you the sum of ", returnSum.toFixed(2));
+				}
+				// Not enough money
+				else {
+					console.log("Sorry, insufficient funds!");
+					console.log("returning money ->", coinSum.toFixed(2));
+
+				}
+				exitFlag = true;
+
+			}
+
+		} while (exitFlag == false);
+
 	}
-	
+
 	// Used to select the item
-	this.itemRequest = function() 
-	{
-		
+	this.itemRequest = function () {
+
 		// Show the menu
 		this.showMenu();
-		
-		// The item number
-		var itemNum = readline.keyInSelect( this.items ,"Please enter the item number: ");
-				
-		console.log("You selected item: ", itemNum + 1);
-		
-		// If this is a bulk purchase, then show the menu
-		var numItemsStr = readline.question("How many " + this.items[itemNum] + "(s) would you like to purchase? ");
 
-		// Get the number of items
-		var numItems = parseInt(numItemsStr);
-		
-		console.log("You requested: ", numItems, " ", this.items[itemNum].toLowerCase(), "(s) which costs " + this.prices[itemNum] * numItems);
-				
+		// The item number
+		var itemNum = readline.keyInSelect(this.items, "Please enter the item number: ",);
+
+		if (itemNum + 1 === 0) {
+			return;
+		}
+		console.log("You selected item: ", itemNum + 1);
+
+
+		// If this is a bulk purchase, then show the menu
+		while (true) {
+			var numItemsInput = readline.questionInt("How many " + this.items[itemNum] + "(s) would you like to purchase? ");
+
+			// Get the number of items
+			var numItems = parseInt(numItemsInput);
+
+			if (numItems >= 1) {
+				break;
+			}
+
+			console.log("Please enter a number greater than or equal to 1.")
+		}
+
+		console.log("You requested: ", numItems, " ", this.items[itemNum].toLowerCase(), "(s) which costs " + Big(this.prices[itemNum]).times(numItems));
+
 
 		// Go to the purchasing process
 		this.inputCoins(this.items[itemNum], this.prices[itemNum], numItems);
 
 	}
 
-	// -----------------------------------------------
-	// Will return the money in dollar bills, quarters,
-	// dimes, nickles and pennys
-	// Returns the coins
-	// Returns the money to the user
-	// @param amount - the sum of money to return
-	// ------------------------------------------------
-	this.returnMoney = function(amount)
-	{
-		// The amount in cents
-		var pennyAmount = amount;
-		
-		// The amount of bills, quarters, dimes, nickles, and cents to return
-		var bills = 0, quarters = 0, dimes = 0, nickles = 0, cents = 0;
-		
-		// Do we have more than a dollar bill?
-		// If so, then lets convert to cents
-		if(amount >= 1)
-		{
-			pennyAmount = amount * 100;
-		}
-		
-		// The amount of dollars
-		dollars = Math.floor(pennyAmount / 100);
-		
-		// How much money is left over
-		var penniesLeftOver = pennyAmount % (dollars * 100);
-		
-		// Let's figure the number of quarters
-		quarters = Math.floor(penniesLeftOver / 25)
-		
-		// Recompute the remaining amount
-		penniesLeftOver	= pennyAmount % (dollars * 100 + quarters * 25);	
-		
-		// Computer the number of dimes
-		dimes = Math.floor(penniesLeftOver / 10)
-		
-		// Compute the pennies left over
-		penniesLeftOver = pennyAmount % (dollars * 100 + quarters * 25 + dimes * 10);	
-
-		// Compute the nickles
-		nickles = Math.floor(penniesLeftOver / 5);
-		
-		// Compute the pennies left over
-		penniesLeftOver = pennyAmount % (dollars * 100 + quarters * 25 + dimes * 10 + nickles * 5);	
-
-		// The number of cents
-		cents = penniesLeftOver;
-
-		console.log("Returning a sum of ",  (dollars * 100 + quarters * 25 + dimes * 10 + nickles * 5 + cents), " cents");
-		console.log(dollars, " dollars");
-		console.log(quarters, " quarters");
-		console.log(dimes, " dimes");
-		console.log(nickles, " nickles");
-		console.log(cents, " cents");
-		
-		
-	}
-	
 	// Turns on the vending machine
-	this.turnOn = function()
-	{
-		this.itemRequest();	
+	this.turnOn = function () {
+		this.itemRequest();
 	}
 }
 
-var vm = new VendingMachine(["Water", "Soda", "Pizza", "Taco", "Tesla"], [.50, .99, 1.99, 3.99, 850000.00]);
+var vm = new VendingMachine(["Water", "Soda", "Pizza", "Taco", "Tesla"], [Big(.50), Big(.99), Big(1.99), Big(3.99), Big(850000.00)]);
 
 
 vm.turnOn();
