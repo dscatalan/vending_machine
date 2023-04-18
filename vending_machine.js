@@ -1,5 +1,7 @@
 // For reading the keyboard input
 const readline = require("readline-sync");
+
+// For dealing with money values
 const Big = require("big.js");
 
 //---------------------------------------------
@@ -20,13 +22,13 @@ function VendingMachine(items, prices) {
     console.log("Welcome to our flawless and secure vending experience!");
 
     // Print Woot twice
-    for (var i = 0; i < 2; ++i) {
+    for (let i = 0; i < 2; ++i) {
       console.log("Woot!");
     }
 
     // Prints all the items
-    for (var i; i < this.items.length; ++i) {
-      console.log(i + ". " + this.items[i] + " [$" + this.prices[i] + "]");
+    for (let i = 0; i < this.items.length; ++i) {
+      console.log(i + 1 + ". " + this.items[i] + " [$" + this.prices[i] + "]");
     }
   };
 
@@ -38,16 +40,14 @@ function VendingMachine(items, prices) {
   this.inputCoins = function (item, price, numItems) {
     price = new Big(price);
     // The coin sum
-    var coinSum = new Big(0.0);
-    var floatCents = new Big(0.0);
-
+    let coinSum = new Big(0.0);
+    let floatCents = new Big(0.0);
     let inputOptions = [
       "Insert money",
       "Return money",
       "Start vending with current amount",
     ];
     let insertedCents = new Big(0.0);
-
     let exitFlag = false;
 
     do {
@@ -56,7 +56,6 @@ function VendingMachine(items, prices) {
         inputOptions,
         "Choose an input option: "
       );
-      //inputChoice += 1;
       console.log(inputOptions[inputChoice] + " was chosen.");
       console.log("inputChoice: ", inputChoice);
       if (inputChoice + 1 === 1) {
@@ -76,9 +75,10 @@ function VendingMachine(items, prices) {
             console.log("You entered: ", insertedCents);
             badInput = false;
           } else {
-            console.log("Please enter a number greater than or equal to 0.");
+            console.log("Please enter a number >= 0.");
           }
         }
+
         // Get the floating point value
         floatCents = new Big(parseFloat(insertedCents));
 
@@ -91,7 +91,7 @@ function VendingMachine(items, prices) {
         console.log("returning money ->", coinSum.toFixed(2));
         exitFlag = true;
       } else if (inputChoice + 1 === 3) {
-        console.log("start vending with current amount");
+        console.log("start vending with current amount...");
         // Enough money!
         if (Math.floor(coinSum / price) >= numItems) {
           let returnSum = new Big(
@@ -122,7 +122,7 @@ function VendingMachine(items, prices) {
     this.showMenu();
 
     // The item number
-    var itemNum = readline.keyInSelect(
+    let itemNum = readline.keyInSelect(
       this.items,
       "Please enter the item number: "
     );
@@ -132,14 +132,17 @@ function VendingMachine(items, prices) {
     }
     console.log("You selected item: ", itemNum + 1);
 
+    let numItemsInput = 0;
+    let numItems = 0;
+
     // If this is a bulk purchase, then show the menu
     while (true) {
-      var numItemsInput = readline.questionInt(
+      numItemsInput = readline.questionInt(
         "How many " + this.items[itemNum] + "(s) would you like to purchase? "
       );
 
       // Get the number of items
-      var numItems = parseInt(numItemsInput);
+      numItems = parseInt(numItemsInput);
 
       if (numItems >= 1) {
         break;
@@ -166,7 +169,7 @@ function VendingMachine(items, prices) {
   };
 }
 
-var vm = new VendingMachine(
+const vm = new VendingMachine(
   ["Water", "Soda", "Pizza", "Taco", "Tesla"],
   [Big(0.5), Big(0.99), Big(1.99), Big(3.99), Big(850000.0)]
 );

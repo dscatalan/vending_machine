@@ -38,7 +38,11 @@ Use [`readlineSync.questionFloat()`](https://github.com/anseki/readline-sync#que
 
 
 
+### Issue 3: Using var instead of `let` or `const` to declare variables
 
+Security Concern: Will lead to confusing scope issues because var declarations are automatically hoisted to the top of the program.
+
+Fix: use Let or const instead, avoid using var.
 
 ## More Secure Coding
 
