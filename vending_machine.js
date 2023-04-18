@@ -113,7 +113,7 @@ function VendingMachine(items, prices) {
         }
         exitFlag = true;
       }
-    } while (exitFlag == false);
+    } while (exitFlag === false);
   };
 
   // Used to select the item

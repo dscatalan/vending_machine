@@ -44,6 +44,14 @@ Security Concern: Will lead to confusing scope issues because var declarations a
 
 Fix: use Let or const instead, avoid using var.
 
+
+
+### Issue 4: `==` performs type conversions and then compares
+
+Security Concern: Returning incorrect boolean due to type conversion
+
+Fix: Generally you should always use `===` or `!==`
+
 ## More Secure Coding
 
 ## XSS
