@@ -64,7 +64,7 @@ Fix: Use prototype for the vending machine object methods. Each vending machine 
 
 ## More Secure Coding
 
-Issue: JavaSript tries to be helpful and fix or ignore programming errors.
+### Issue 6: JavaSript tries to be helpful and fix or ignore programming errors.
 
 Security Concern:  This can lead to security vulnerabilities and unintended logic errors
 
