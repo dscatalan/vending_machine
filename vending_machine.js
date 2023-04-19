@@ -3,7 +3,7 @@
 // For reading the keyboard input
 const readline = require("readline-sync");
 
-// For dealing with money values
+// For dealing with floating point values
 const Big = require("big.js");
 
 //---------------------------------------------
@@ -19,6 +19,7 @@ function VendingMachine(items, prices) {
   // How many coins the machine has accepted
   this.sumOfCointsAccepted = 0;
 }
+
 // Displays the menu
 VendingMachine.prototype.showMenu = function () {
   console.log("Welcome to our flawless and secure vending experience!");
@@ -92,10 +93,13 @@ VendingMachine.prototype.inputCoins = function (item, price, numItems) {
       // Add the coin sum
       coinSum = coinSum.plus(floatCents);
 
-      console.log("Just accepted ", floatCents, " worth of coins\n");
+      console.log("Just accepted", floatCents.toString(), "worth of coins\n");
     } else if (inputChoice + 1 === 2) {
       // Return Requested
-      console.log("Returning money: ", coinSum.round(2, Big.roundDown));
+      console.log(
+        "Returning money: ",
+        coinSum.round(2, Big.roundDown).toString()
+      );
       exitFlag = true;
     } else if (inputChoice + 1 === 3) {
       console.log("Start vending with current amount...");
@@ -110,7 +114,7 @@ VendingMachine.prototype.inputCoins = function (item, price, numItems) {
           " ",
           item,
           "(s).  Also, returning to you the sum of ",
-          (returnSum.round(2, Big.roundDown)).toString()
+          returnSum.round(2, Big.roundDown).toString()
         );
       }
       // Not enough money
@@ -163,7 +167,8 @@ VendingMachine.prototype.itemRequest = function () {
     numItems,
     " ",
     this.items[itemNum].toLowerCase(),
-    "(s) which costs " + (Big(this.prices[itemNum]).times(numItems)).round(2, Big.roundDown)
+    "(s) which costs " +
+      Big(this.prices[itemNum]).times(numItems).round(2, Big.roundDown)
   );
 
   // Go to the purchasing process
