@@ -56,6 +56,10 @@ Fix: Generally you should always use `===` or `!==`
 
 ### Issue 5: Not using prototype (or syntactic sugar provided by Classes) functions for vending machine object
 
+Securit Concern: Vulnerable to DDOS attack due to heavy memory usage.
+
+Fix: Using prototype for the vending machine object methods saves memory space. Each vending machine object will share the same methods in memory instead of creating duplicate methods for each new vending machine instance.
+
 
 
 ## More Secure Coding
