@@ -87,7 +87,7 @@ VendingMachine.prototype.inputCoins = function (item, price, numItems) {
 
       // Get the floating point value
       floatCents = new Big(parseFloat(insertedCents));
-      floatCents = floatCents.round(2, Big.roundDown)
+      floatCents = floatCents.round(2, Big.roundDown);
 
       // Add the coin sum
       coinSum = coinSum.plus(floatCents);
@@ -95,10 +95,10 @@ VendingMachine.prototype.inputCoins = function (item, price, numItems) {
       console.log("Just accepted ", floatCents, " worth of coins\n");
     } else if (inputChoice + 1 === 2) {
       // Return Requested
-      console.log("returning money ->", coinSum.toFixed(2));
+      console.log("Returning money: ", coinSum.round(2, Big.roundDown));
       exitFlag = true;
     } else if (inputChoice + 1 === 3) {
-      console.log("start vending with current amount...");
+      console.log("Start vending with current amount...");
       // Enough money!
       if (Math.floor(coinSum / price) >= numItems) {
         let returnSum = new Big(
@@ -110,13 +110,13 @@ VendingMachine.prototype.inputCoins = function (item, price, numItems) {
           " ",
           item,
           "(s).  Also, returning to you the sum of ",
-          returnSum.toFixed(2)
+          (returnSum.round(2, Big.roundDown)).toString()
         );
       }
       // Not enough money
       else {
         console.log("Sorry, insufficient funds!");
-        console.log("returning money ->", coinSum.toFixed(2));
+        console.log("returning money ->", coinSum.round(2, Big.roundDown));
       }
       exitFlag = true;
     }
@@ -163,7 +163,7 @@ VendingMachine.prototype.itemRequest = function () {
     numItems,
     " ",
     this.items[itemNum].toLowerCase(),
-    "(s) which costs " + Big(this.prices[itemNum]).times(numItems)
+    "(s) which costs " + (Big(this.prices[itemNum]).times(numItems)).round(2, Big.roundDown)
   );
 
   // Go to the purchasing process
