@@ -56,18 +56,16 @@ Fix: Generally you should always use `===` or `!==`
 
 ### Issue 5: Not using prototype (or syntactic sugar provided by Classes) functions for vending machine object
 
-Securit Concern: Vulnerable to DDOS attack due to heavy memory usage.
+Security Concern: Vulnerable to DDOS attack due to heavy memory usage.
 
-Fix: Using prototype for the vending machine object methods saves memory space. Each vending machine object will share the same methods in memory instead of creating duplicate methods for each new vending machine instance.
+Fix: Use prototype for the vending machine object methods. Each vending machine object will share the same methods in memory instead of creating duplicate methods for each new vending machine instance. Another possible solution would be to use the syntactic sugar provided by ES6 Classes to create objects from prototypes.
 
 
 
 ## More Secure Coding
 
-## XSS
+Issue: JavaSript tries to be helpful and fix or ignore programming errors.
 
-Issue:
+Security Concern:  This can lead to security vulnerabilities and unintended logic errors
 
-Security Concern:
-
-Fix:
+Fix: use Use Strict Mode to use a stricter version of JavaScript. Strict Mode changes some silent errors to throw exceptions, among other things. 
