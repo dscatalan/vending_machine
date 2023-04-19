@@ -86,7 +86,8 @@ VendingMachine.prototype.inputCoins = function (item, price, numItems) {
       }
 
       // Get the floating point value
-      floatCents = new Big(parseFloat(insertedCents.toFixed(2)));
+      floatCents = new Big(parseFloat(insertedCents));
+      floatCents = floatCents.round(2, Big.roundDown)
 
       // Add the coin sum
       coinSum = coinSum.plus(floatCents);
